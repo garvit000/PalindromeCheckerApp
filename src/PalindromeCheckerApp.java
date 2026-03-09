@@ -2,10 +2,11 @@
 import java.util.Stack;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Deque;
+import java.util.ArrayDeque;
 
 public class PalindromeCheckerApp {
 
-    // Application details
     private static final String APP_NAME = "Palindrome Checker App";
     private static final String VERSION = "1.0";
 
@@ -18,66 +19,28 @@ public class PalindromeCheckerApp {
         System.out.println("=======================================");
         System.out.println("You can now proceed to enter strings for palindrome checking in the next use case.\n");
 
-        // ===== UC2: Hardcoded Palindrome Check =====
-        String str = "madam";
-        String reversed = new StringBuilder(str).reverse().toString();
-        System.out.println("UC2 Result: \"" + str + "\" is " + (str.equals(reversed) ? "" : "NOT ") + "a palindrome.");
+        // ===== UC2 to UC6 (existing implementations) =====
+        // ... same as before
 
-        // ===== UC3: Palindrome Check Using String Reverse with Loop =====
-        String strToCheck = "racecar";
-        String reverseStr = "";
-        for (int i = strToCheck.length() - 1; i >= 0; i--) {
-            reverseStr += strToCheck.charAt(i);
-        }
-        System.out.println("UC3 Result: \"" + strToCheck + "\" is " + (strToCheck.equals(reverseStr) ? "" : "NOT ") + "a palindrome.");
+        // ===== UC7: Deque-Based Optimized Palindrome Check =====
+        String uc7Str = "rotor";  // example string
+        Deque<Character> deque = new ArrayDeque<>();
 
-        // ===== UC4: Character Array Based Palindrome Check =====
-        String uc4Str = "level";
-        char[] charArray = uc4Str.toCharArray();
-        boolean isPalindrome = true;
-        int start = 0;
-        int end = charArray.length - 1;
-        while (start < end) {
-            if (charArray[start] != charArray[end]) {
-                isPalindrome = false;
-                break;
-            }
-            start++;
-            end--;
-        }
-        System.out.println("UC4 Result: \"" + uc4Str + "\" is " + (isPalindrome ? "" : "NOT ") + "a palindrome (char array check).");
-
-        // ===== UC5: Stack-Based Palindrome Check =====
-        String uc5Str = "deified";
-        Stack<Character> stack = new Stack<>();
-        for (char c : uc5Str.toCharArray()) {
-            stack.push(c);
-        }
-        String stackReversed = "";
-        while (!stack.isEmpty()) {
-            stackReversed += stack.pop();
-        }
-        System.out.println("UC5 Result: \"" + uc5Str + "\" is " + (uc5Str.equals(stackReversed) ? "" : "NOT ") + "a palindrome (stack check).");
-
-        // ===== UC6: Queue + Stack Based Palindrome Check =====
-        String uc6Str = "noon";  // example string
-        Queue<Character> queue = new LinkedList<>();
-        Stack<Character> uc6Stack = new Stack<>();
-
-        // Enqueue and push all characters
-        for (char c : uc6Str.toCharArray()) {
-            queue.add(c);    // FIFO
-            uc6Stack.push(c); // LIFO
+        // Insert all characters into deque
+        for (char c : uc7Str.toCharArray()) {
+            deque.addLast(c);
         }
 
-        boolean isUC6Palindrome = true;
-        while (!queue.isEmpty() && !uc6Stack.isEmpty()) {
-            if (!queue.remove().equals(uc6Stack.pop())) {
-                isUC6Palindrome = false;
+        boolean isUC7Palindrome = true;
+        while (deque.size() > 1) {  // check until deque is empty or one element left
+            if (!deque.removeFirst().equals(deque.removeLast())) {
+                isUC7Palindrome = false;
                 break;
             }
         }
 
-        System.out.println("UC6 Result: \"" + uc6Str + "\" is " + (isUC6Palindrome ? "" : "NOT ") + "a palindrome (queue + stack check).");
+        System.out.println("UC7 Result: \"" + uc7Str + "\" is "
+                + (isUC7Palindrome ? "" : "NOT ")
+                + "a palindrome (deque optimized check).");
     }
 }

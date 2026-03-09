@@ -12,78 +12,24 @@ public class PalindromeCheckerApp {
         System.out.println("This application checks if a string is a palindrome.");
         System.out.println("=======================================");
 
-        // ===== UC8: Linked List Based Palindrome Checker =====
-        String uc8Str = "racecar"; // example string
+        // ===== UC9: Recursive Palindrome Checker =====
+        String uc9Str = "level"; // example string
+        boolean isUC9Palindrome = isPalindromeRecursive(uc9Str, 0, uc9Str.length() - 1);
 
-        Node head = buildLinkedList(uc8Str);
-        boolean isUC8Palindrome = checkLinkedListPalindrome(head);
-
-        System.out.println("UC8 Result: \"" + uc8Str + "\" is "
-                + (isUC8Palindrome ? "" : "NOT ")
-                + "a palindrome (linked list check).");
+        System.out.println("UC9 Result: \"" + uc9Str + "\" is "
+                + (isUC9Palindrome ? "" : "NOT ")
+                + "a palindrome (recursive check).");
     }
 
-    // Node class for singly linked list
-    static class Node {
-        char val;
-        Node next;
-        Node(char val) { this.val = val; this.next = null; }
-    }
+    // Recursive palindrome check
+    static boolean isPalindromeRecursive(String str, int left, int right) {
+        // Base case: reached middle or crossed indices
+        if (left >= right) return true;
 
-    // Build linked list from string
-    static Node buildLinkedList(String str) {
-        if (str == null || str.isEmpty()) return null;
-        Node head = new Node(str.charAt(0));
-        Node current = head;
-        for (int i = 1; i < str.length(); i++) {
-            current.next = new Node(str.charAt(i));
-            current = current.next;
-        }
-        return head;
-    }
+        // Mismatch found
+        if (str.charAt(left) != str.charAt(right)) return false;
 
-    // Check palindrome using fast/slow pointer and reverse second half
-    static boolean checkLinkedListPalindrome(Node head) {
-        if (head == null || head.next == null) return true;
-
-        // Find middle (slow = mid, fast = end)
-        Node slow = head, fast = head;
-        while (fast.next != null && fast.next.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
-        }
-
-        // Reverse second half
-        Node secondHalfStart = reverseList(slow.next);
-
-        // Compare halves
-        Node firstHalf = head;
-        Node secondHalf = secondHalfStart;
-        boolean palindrome = true;
-        while (secondHalf != null) {
-            if (firstHalf.val != secondHalf.val) {
-                palindrome = false;
-                break;
-            }
-            firstHalf = firstHalf.next;
-            secondHalf = secondHalf.next;
-        }
-
-        // Optional: restore list
-        slow.next = reverseList(secondHalfStart);
-
-        return palindrome;
-    }
-
-    // Reverse linked list
-    static Node reverseList(Node head) {
-        Node prev = null, curr = head;
-        while (curr != null) {
-            Node next = curr.next;
-            curr.next = prev;
-            prev = curr;
-            curr = next;
-        }
-        return prev;
+        // Recur for inner substring
+        return isPalindromeRecursive(str, left + 1, right - 1);
     }
 }

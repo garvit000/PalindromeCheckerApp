@@ -1,10 +1,4 @@
 // File: PalindromeCheckerApp.java
-import java.util.Stack;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Deque;
-import java.util.ArrayDeque;
-
 public class PalindromeCheckerApp {
 
     private static final String APP_NAME = "Palindrome Checker App";
@@ -17,30 +11,79 @@ public class PalindromeCheckerApp {
         System.out.println("Version: " + VERSION);
         System.out.println("This application checks if a string is a palindrome.");
         System.out.println("=======================================");
-        System.out.println("You can now proceed to enter strings for palindrome checking in the next use case.\n");
 
-        // ===== UC2 to UC6 (existing implementations) =====
-        // ... same as before
+        // ===== UC8: Linked List Based Palindrome Checker =====
+        String uc8Str = "racecar"; // example string
 
-        // ===== UC7: Deque-Based Optimized Palindrome Check =====
-        String uc7Str = "rotor";  // example string
-        Deque<Character> deque = new ArrayDeque<>();
+        Node head = buildLinkedList(uc8Str);
+        boolean isUC8Palindrome = checkLinkedListPalindrome(head);
 
-        // Insert all characters into deque
-        for (char c : uc7Str.toCharArray()) {
-            deque.addLast(c);
+        System.out.println("UC8 Result: \"" + uc8Str + "\" is "
+                + (isUC8Palindrome ? "" : "NOT ")
+                + "a palindrome (linked list check).");
+    }
+
+    // Node class for singly linked list
+    static class Node {
+        char val;
+        Node next;
+        Node(char val) { this.val = val; this.next = null; }
+    }
+
+    // Build linked list from string
+    static Node buildLinkedList(String str) {
+        if (str == null || str.isEmpty()) return null;
+        Node head = new Node(str.charAt(0));
+        Node current = head;
+        for (int i = 1; i < str.length(); i++) {
+            current.next = new Node(str.charAt(i));
+            current = current.next;
+        }
+        return head;
+    }
+
+    // Check palindrome using fast/slow pointer and reverse second half
+    static boolean checkLinkedListPalindrome(Node head) {
+        if (head == null || head.next == null) return true;
+
+        // Find middle (slow = mid, fast = end)
+        Node slow = head, fast = head;
+        while (fast.next != null && fast.next.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
         }
 
-        boolean isUC7Palindrome = true;
-        while (deque.size() > 1) {  // check until deque is empty or one element left
-            if (!deque.removeFirst().equals(deque.removeLast())) {
-                isUC7Palindrome = false;
+        // Reverse second half
+        Node secondHalfStart = reverseList(slow.next);
+
+        // Compare halves
+        Node firstHalf = head;
+        Node secondHalf = secondHalfStart;
+        boolean palindrome = true;
+        while (secondHalf != null) {
+            if (firstHalf.val != secondHalf.val) {
+                palindrome = false;
                 break;
             }
+            firstHalf = firstHalf.next;
+            secondHalf = secondHalf.next;
         }
 
-        System.out.println("UC7 Result: \"" + uc7Str + "\" is "
-                + (isUC7Palindrome ? "" : "NOT ")
-                + "a palindrome (deque optimized check).");
+        // Optional: restore list
+        slow.next = reverseList(secondHalfStart);
+
+        return palindrome;
+    }
+
+    // Reverse linked list
+    static Node reverseList(Node head) {
+        Node prev = null, curr = head;
+        while (curr != null) {
+            Node next = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = next;
+        }
+        return prev;
     }
 }

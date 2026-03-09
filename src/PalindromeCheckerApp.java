@@ -1,4 +1,6 @@
 // File: PalindromeCheckerApp.java
+import java.util.Stack;
+
 public class PalindromeCheckerApp {
 
     // Application details
@@ -33,11 +35,53 @@ public class PalindromeCheckerApp {
             reverseStr += strToCheck.charAt(i); // concatenation
         }
 
-        // check palindrome
         if (strToCheck.equals(reverseStr)) {
             System.out.println("UC3 Result: The string \"" + strToCheck + "\" is a palindrome.");
         } else {
             System.out.println("UC3 Result: The string \"" + strToCheck + "\" is NOT a palindrome.");
+        }
+
+        // ===== UC4: Character Array Based Palindrome Check =====
+        String uc4Str = "level"; // example string for UC4
+        char[] charArray = uc4Str.toCharArray();
+        boolean isPalindrome = true;
+        int start = 0;
+        int end = charArray.length - 1;
+
+        while (start < end) {
+            if (charArray[start] != charArray[end]) {
+                isPalindrome = false;
+                break;
+            }
+            start++;
+            end--;
+        }
+
+        if (isPalindrome) {
+            System.out.println("UC4 Result: The string \"" + uc4Str + "\" is a palindrome (char array check).");
+        } else {
+            System.out.println("UC4 Result: The string \"" + uc4Str + "\" is NOT a palindrome (char array check).");
+        }
+
+        // ===== UC5: Stack-Based Palindrome Check =====
+        String uc5Str = "deified"; // example string for UC5
+        Stack<Character> stack = new Stack<>();
+
+        // Push all characters into stack
+        for (char c : uc5Str.toCharArray()) {
+            stack.push(c);
+        }
+
+        // Pop characters and build reversed string
+        String stackReversed = "";
+        while (!stack.isEmpty()) {
+            stackReversed += stack.pop();
+        }
+
+        if (uc5Str.equals(stackReversed)) {
+            System.out.println("UC5 Result: The string \"" + uc5Str + "\" is a palindrome (stack check).");
+        } else {
+            System.out.println("UC5 Result: The string \"" + uc5Str + "\" is NOT a palindrome (stack check).");
         }
     }
 }

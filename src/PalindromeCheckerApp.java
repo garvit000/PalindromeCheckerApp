@@ -1,31 +1,28 @@
 // File: PalindromeCheckerApp.java
 public class PalindromeCheckerApp {
 
-    private static final String APP_NAME = "Palindrome Checker App";
-    private static final String VERSION = "1.0";
-
     public static void main(String[] args) {
-        // ===== UC1: Welcome Message =====
-        System.out.println("=======================================");
-        System.out.println("Welcome to " + APP_NAME + "!");
-        System.out.println("Version: " + VERSION);
-        System.out.println("This application checks if a string is a palindrome.");
-        System.out.println("=======================================");
+        System.out.println("========== Palindrome Checker App: UC13 Performance Comparison ==========");
 
-        // UC12: Strategy Pattern Example
-        String testStr = "level";
+        String testStr = "racecar";  // Sample palindrome
 
-        // Use Stack Strategy
+        // Initialize strategies
         PalindromeStrategy stackStrategy = new StackPalindromeStrategy();
-        PalindromeContext context = new PalindromeContext(stackStrategy);
-        System.out.println("Stack Strategy: \"" + testStr + "\" is "
-                + (context.check(testStr) ? "" : "NOT ") + "a palindrome.");
-
-        // Switch to Deque Strategy
         PalindromeStrategy dequeStrategy = new DequePalindromeStrategy();
-        context.setStrategy(dequeStrategy);
-        System.out.println("Deque Strategy: \"" + testStr + "\" is "
-                + (context.check(testStr) ? "" : "NOT ") + "a palindrome.");
+        PalindromeStrategy stringReverseStrategy = new StringReversePalindromeStrategy();
+
+        // Compare performance
+        measurePerformance("Stack Strategy", stackStrategy, testStr);
+        measurePerformance("Deque Strategy", dequeStrategy, testStr);
+        measurePerformance("String Reverse Strategy", stringReverseStrategy, testStr);
+    }
+
+    private static void measurePerformance(String name, PalindromeStrategy strategy, String input) {
+        long start = System.nanoTime();
+        boolean result = strategy.isPalindrome(input);
+        long end = System.nanoTime();
+        System.out.println(name + ": " + (result ? "Palindrome" : "Not Palindrome") +
+                " | Execution time: " + (end - start) + " ns");
     }
 }
 
@@ -37,7 +34,6 @@ interface PalindromeStrategy {
 // Stack-based implementation
 class StackPalindromeStrategy implements PalindromeStrategy {
     public boolean isPalindrome(String str) {
-        if (str == null) return false;
         java.util.Stack<Character> stack = new java.util.Stack<>();
         for (char ch : str.toCharArray()) stack.push(ch);
         for (char ch : str.toCharArray()) {
@@ -50,7 +46,6 @@ class StackPalindromeStrategy implements PalindromeStrategy {
 // Deque-based implementation
 class DequePalindromeStrategy implements PalindromeStrategy {
     public boolean isPalindrome(String str) {
-        if (str == null) return false;
         java.util.Deque<Character> deque = new java.util.ArrayDeque<>();
         for (char ch : str.toCharArray()) deque.addLast(ch);
         while (deque.size() > 1) {
@@ -60,19 +55,11 @@ class DequePalindromeStrategy implements PalindromeStrategy {
     }
 }
 
-// Context Class
-class PalindromeContext {
-    private PalindromeStrategy strategy;
-
-    public PalindromeContext(PalindromeStrategy strategy) {
-        this.strategy = strategy;
-    }
-
-    public void setStrategy(PalindromeStrategy strategy) {
-        this.strategy = strategy;
-    }
-
-    public boolean check(String str) {
-        return strategy.isPalindrome(str);
+// String Reverse-based implementation
+class StringReversePalindromeStrategy implements PalindromeStrategy {
+    public boolean isPalindrome(String str) {
+        String reversed = "";
+        for (int i = str.length() - 1; i >= 0; i--) reversed += str.charAt(i);
+        return str.equals(reversed);
     }
 }

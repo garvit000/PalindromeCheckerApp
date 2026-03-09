@@ -23,5 +23,21 @@ public class PalindromeCheckerApp {
         } else {
             System.out.println("UC2 Result: The string \"" + str + "\" is NOT a palindrome.");
         }
+
+        // ===== UC3: Palindrome Check Using String Reverse with Loop =====
+        String strToCheck = "racecar";  // example string
+        String reverseStr = "";
+
+        // reverse string manually
+        for (int i = strToCheck.length() - 1; i >= 0; i--) {
+            reverseStr += strToCheck.charAt(i); // concatenation
+        }
+
+        // check palindrome
+        if (strToCheck.equals(reverseStr)) {
+            System.out.println("UC3 Result: The string \"" + strToCheck + "\" is a palindrome.");
+        } else {
+            System.out.println("UC3 Result: The string \"" + strToCheck + "\" is NOT a palindrome.");
+        }
     }
 }

@@ -12,36 +12,67 @@ public class PalindromeCheckerApp {
         System.out.println("This application checks if a string is a palindrome.");
         System.out.println("=======================================");
 
-        // ===== UC11: Object-Oriented Palindrome Service =====
-        PalindromeChecker checker = new PalindromeChecker();
+        // UC12: Strategy Pattern Example
+        String testStr = "level";
 
-        String testStr1 = "radar";
-        String testStr2 = "hello";
+        // Use Stack Strategy
+        PalindromeStrategy stackStrategy = new StackPalindromeStrategy();
+        PalindromeContext context = new PalindromeContext(stackStrategy);
+        System.out.println("Stack Strategy: \"" + testStr + "\" is "
+                + (context.check(testStr) ? "" : "NOT ") + "a palindrome.");
 
-        System.out.println("UC11 Result: \"" + testStr1 + "\" is "
-                + (checker.checkPalindrome(testStr1) ? "" : "NOT ")
-                + "a palindrome.");
-        System.out.println("UC11 Result: \"" + testStr2 + "\" is "
-                + (checker.checkPalindrome(testStr2) ? "" : "NOT ")
-                + "a palindrome.");
+        // Switch to Deque Strategy
+        PalindromeStrategy dequeStrategy = new DequePalindromeStrategy();
+        context.setStrategy(dequeStrategy);
+        System.out.println("Deque Strategy: \"" + testStr + "\" is "
+                + (context.check(testStr) ? "" : "NOT ") + "a palindrome.");
     }
 }
 
-// PalindromeChecker class encapsulates the logic
-class PalindromeChecker {
+// Strategy Interface
+interface PalindromeStrategy {
+    boolean isPalindrome(String str);
+}
 
-    // Method to check palindrome using simple two-pointer technique
-    public boolean checkPalindrome(String str) {
+// Stack-based implementation
+class StackPalindromeStrategy implements PalindromeStrategy {
+    public boolean isPalindrome(String str) {
         if (str == null) return false;
-
-        int left = 0;
-        int right = str.length() - 1;
-
-        while (left < right) {
-            if (str.charAt(left) != str.charAt(right)) return false;
-            left++;
-            right--;
+        java.util.Stack<Character> stack = new java.util.Stack<>();
+        for (char ch : str.toCharArray()) stack.push(ch);
+        for (char ch : str.toCharArray()) {
+            if (ch != stack.pop()) return false;
         }
         return true;
+    }
+}
+
+// Deque-based implementation
+class DequePalindromeStrategy implements PalindromeStrategy {
+    public boolean isPalindrome(String str) {
+        if (str == null) return false;
+        java.util.Deque<Character> deque = new java.util.ArrayDeque<>();
+        for (char ch : str.toCharArray()) deque.addLast(ch);
+        while (deque.size() > 1) {
+            if (deque.removeFirst() != deque.removeLast()) return false;
+        }
+        return true;
+    }
+}
+
+// Context Class
+class PalindromeContext {
+    private PalindromeStrategy strategy;
+
+    public PalindromeContext(PalindromeStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public void setStrategy(PalindromeStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public boolean check(String str) {
+        return strategy.isPalindrome(str);
     }
 }

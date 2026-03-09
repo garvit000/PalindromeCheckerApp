@@ -1,5 +1,7 @@
 // File: PalindromeCheckerApp.java
 import java.util.Stack;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class PalindromeCheckerApp {
 
@@ -17,37 +19,24 @@ public class PalindromeCheckerApp {
         System.out.println("You can now proceed to enter strings for palindrome checking in the next use case.\n");
 
         // ===== UC2: Hardcoded Palindrome Check =====
-        String str = "madam";  // hardcoded string
+        String str = "madam";
         String reversed = new StringBuilder(str).reverse().toString();
-
-        if (str.equals(reversed)) {
-            System.out.println("UC2 Result: The string \"" + str + "\" is a palindrome.");
-        } else {
-            System.out.println("UC2 Result: The string \"" + str + "\" is NOT a palindrome.");
-        }
+        System.out.println("UC2 Result: \"" + str + "\" is " + (str.equals(reversed) ? "" : "NOT ") + "a palindrome.");
 
         // ===== UC3: Palindrome Check Using String Reverse with Loop =====
-        String strToCheck = "racecar";  // example string
+        String strToCheck = "racecar";
         String reverseStr = "";
-
-        // reverse string manually
         for (int i = strToCheck.length() - 1; i >= 0; i--) {
-            reverseStr += strToCheck.charAt(i); // concatenation
+            reverseStr += strToCheck.charAt(i);
         }
-
-        if (strToCheck.equals(reverseStr)) {
-            System.out.println("UC3 Result: The string \"" + strToCheck + "\" is a palindrome.");
-        } else {
-            System.out.println("UC3 Result: The string \"" + strToCheck + "\" is NOT a palindrome.");
-        }
+        System.out.println("UC3 Result: \"" + strToCheck + "\" is " + (strToCheck.equals(reverseStr) ? "" : "NOT ") + "a palindrome.");
 
         // ===== UC4: Character Array Based Palindrome Check =====
-        String uc4Str = "level"; // example string for UC4
+        String uc4Str = "level";
         char[] charArray = uc4Str.toCharArray();
         boolean isPalindrome = true;
         int start = 0;
         int end = charArray.length - 1;
-
         while (start < end) {
             if (charArray[start] != charArray[end]) {
                 isPalindrome = false;
@@ -56,32 +45,39 @@ public class PalindromeCheckerApp {
             start++;
             end--;
         }
-
-        if (isPalindrome) {
-            System.out.println("UC4 Result: The string \"" + uc4Str + "\" is a palindrome (char array check).");
-        } else {
-            System.out.println("UC4 Result: The string \"" + uc4Str + "\" is NOT a palindrome (char array check).");
-        }
+        System.out.println("UC4 Result: \"" + uc4Str + "\" is " + (isPalindrome ? "" : "NOT ") + "a palindrome (char array check).");
 
         // ===== UC5: Stack-Based Palindrome Check =====
-        String uc5Str = "deified"; // example string for UC5
+        String uc5Str = "deified";
         Stack<Character> stack = new Stack<>();
-
-        // Push all characters into stack
         for (char c : uc5Str.toCharArray()) {
             stack.push(c);
         }
-
-        // Pop characters and build reversed string
         String stackReversed = "";
         while (!stack.isEmpty()) {
             stackReversed += stack.pop();
         }
+        System.out.println("UC5 Result: \"" + uc5Str + "\" is " + (uc5Str.equals(stackReversed) ? "" : "NOT ") + "a palindrome (stack check).");
 
-        if (uc5Str.equals(stackReversed)) {
-            System.out.println("UC5 Result: The string \"" + uc5Str + "\" is a palindrome (stack check).");
-        } else {
-            System.out.println("UC5 Result: The string \"" + uc5Str + "\" is NOT a palindrome (stack check).");
+        // ===== UC6: Queue + Stack Based Palindrome Check =====
+        String uc6Str = "noon";  // example string
+        Queue<Character> queue = new LinkedList<>();
+        Stack<Character> uc6Stack = new Stack<>();
+
+        // Enqueue and push all characters
+        for (char c : uc6Str.toCharArray()) {
+            queue.add(c);    // FIFO
+            uc6Stack.push(c); // LIFO
         }
+
+        boolean isUC6Palindrome = true;
+        while (!queue.isEmpty() && !uc6Stack.isEmpty()) {
+            if (!queue.remove().equals(uc6Stack.pop())) {
+                isUC6Palindrome = false;
+                break;
+            }
+        }
+
+        System.out.println("UC6 Result: \"" + uc6Str + "\" is " + (isUC6Palindrome ? "" : "NOT ") + "a palindrome (queue + stack check).");
     }
 }

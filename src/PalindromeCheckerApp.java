@@ -12,24 +12,36 @@ public class PalindromeCheckerApp {
         System.out.println("This application checks if a string is a palindrome.");
         System.out.println("=======================================");
 
-        // ===== UC9: Recursive Palindrome Checker =====
-        String uc9Str = "level"; // example string
-        boolean isUC9Palindrome = isPalindromeRecursive(uc9Str, 0, uc9Str.length() - 1);
+        // ===== UC11: Object-Oriented Palindrome Service =====
+        PalindromeChecker checker = new PalindromeChecker();
 
-        System.out.println("UC9 Result: \"" + uc9Str + "\" is "
-                + (isUC9Palindrome ? "" : "NOT ")
-                + "a palindrome (recursive check).");
+        String testStr1 = "radar";
+        String testStr2 = "hello";
+
+        System.out.println("UC11 Result: \"" + testStr1 + "\" is "
+                + (checker.checkPalindrome(testStr1) ? "" : "NOT ")
+                + "a palindrome.");
+        System.out.println("UC11 Result: \"" + testStr2 + "\" is "
+                + (checker.checkPalindrome(testStr2) ? "" : "NOT ")
+                + "a palindrome.");
     }
+}
 
-    // Recursive palindrome check
-    static boolean isPalindromeRecursive(String str, int left, int right) {
-        // Base case: reached middle or crossed indices
-        if (left >= right) return true;
+// PalindromeChecker class encapsulates the logic
+class PalindromeChecker {
 
-        // Mismatch found
-        if (str.charAt(left) != str.charAt(right)) return false;
+    // Method to check palindrome using simple two-pointer technique
+    public boolean checkPalindrome(String str) {
+        if (str == null) return false;
 
-        // Recur for inner substring
-        return isPalindromeRecursive(str, left + 1, right - 1);
+        int left = 0;
+        int right = str.length() - 1;
+
+        while (left < right) {
+            if (str.charAt(left) != str.charAt(right)) return false;
+            left++;
+            right--;
+        }
+        return true;
     }
 }

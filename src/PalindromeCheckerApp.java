@@ -12,24 +12,21 @@ public class PalindromeCheckerApp {
         System.out.println("This application checks if a string is a palindrome.");
         System.out.println("=======================================");
 
-        // ===== UC9: Recursive Palindrome Checker =====
-        String uc9Str = "level"; // example string
-        boolean isUC9Palindrome = isPalindromeRecursive(uc9Str, 0, uc9Str.length() - 1);
+        // ===== UC10: Case-Insensitive & Space-Ignored Palindrome =====
+        String uc10Str = "A man a plan a canal Panama"; // example
+        String normalized = uc10Str.replaceAll("\\s+", "").toLowerCase(); // remove spaces & lowercase
 
-        System.out.println("UC9 Result: \"" + uc9Str + "\" is "
-                + (isUC9Palindrome ? "" : "NOT ")
-                + "a palindrome (recursive check).");
+        boolean isUC10Palindrome = isPalindromeRecursive(normalized, 0, normalized.length() - 1);
+
+        System.out.println("UC10 Result: \"" + uc10Str + "\" is "
+                + (isUC10Palindrome ? "" : "NOT ")
+                + "a palindrome (case-insensitive & space-ignored).");
     }
 
-    // Recursive palindrome check
+    // Reusable recursive palindrome check
     static boolean isPalindromeRecursive(String str, int left, int right) {
-        // Base case: reached middle or crossed indices
-        if (left >= right) return true;
-
-        // Mismatch found
-        if (str.charAt(left) != str.charAt(right)) return false;
-
-        // Recur for inner substring
-        return isPalindromeRecursive(str, left + 1, right - 1);
+        if (left >= right) return true;           // Base case
+        if (str.charAt(left) != str.charAt(right)) return false; // mismatch
+        return isPalindromeRecursive(str, left + 1, right - 1); // recur inward
     }
 }
